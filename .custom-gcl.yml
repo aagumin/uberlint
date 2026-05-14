@@ -1,0 +1,5 @@
+version: v2.0.0
+name: custom-gcl
+plugins:
+  - module: 'github.com/aagumin/uberlint'
+    path: .

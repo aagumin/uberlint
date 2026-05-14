@@ -11,14 +11,14 @@
 
 | # | Рекомендация | Линтер / Инструмент | Покрытие |
 |---|---|---|---|
-| 1 | **Pointers to Interfaces** — не используй указатели на интерфейсы | Нет | — |
+| 1 | **Pointers to Interfaces** — не используй указатели на интерфейсы | `uberlint: ifaceptr` | Полное |
 | 2 | **Verify Interface Compliance** — проверяй `var _ Interface = (*Type)(nil)` | Нет | — |
 | 3 | **Receivers and Interfaces** — value vs pointer receivers | `recvcheck` (частично, проверяет консистентность receiver types) | Частичное |
 | 4 | **Zero-value Mutexes are Valid** — не используй `new(sync.Mutex)`, не встраивай mutex | `govet: copylocks` (ловит копирование mutex); нет линтера для запрета встраивания | Частичное |
 | 5 | **Copy Slices and Maps at Boundaries** — копируй при получении/возврате | Нет | — |
 | 6 | **Defer to Clean Up** — используй defer для освобождения ресурсов | Нет | — |
-| 7 | **Channel Size is One or None** — каналы с буфером 0 или 1 | Нет | — |
-| 8 | **Start Enums at One** — начинай enum с `iota + 1` | Нет | — |
+| 7 | **Channel Size is One or None** — каналы с буфером 0 или 1 | `uberlint: chansize` | Полное |
+| 8 | **Start Enums at One** — начинай enum с `iota + 1` | `uberlint: enumstart` | Полное |
 
 ---
 
@@ -28,7 +28,7 @@
 |---|---|---|---|
 | 9 | **Use `time.Time` for instants of time** | Нет | — |
 | 10 | **Use `time.Duration` for periods of time** | Нет | — |
-| 11 | **Use `time.Time` and `time.Duration` with external systems** — включай единицы в имена полей | Нет | — |
+| 11 | **Use `time.Time` and `time.Duration` with external systems** — включай единицы в имена полей | `uberlint: timefield` | Частичное |
 
 ---
 
@@ -48,10 +48,10 @@
 
 | # | Рекомендация | Линтер / Инструмент | Покрытие |
 |---|---|---|---|
-| 17 | **Don't Panic** — избегай panic в продакшн-коде | Нет | — |
-| 18 | **Use `sync/atomic` typed values** — используй `atomic.Bool`, `atomic.Int64` и т.д. (с Go 1.19 в stdlib, вместо `go.uber.org/atomic`) | Нет | — |
+| 17 | **Don't Panic** — избегай panic в продакшн-коде | `uberlint: nopanic` | Полное |
+| 18 | **Use `sync/atomic` typed values** — используй `atomic.Bool`, `atomic.Int64` и т.д. (с Go 1.19 в stdlib, вместо `go.uber.org/atomic`) | `uberlint: atomicstd` | Полное |
 | 19 | **Avoid Mutable Globals** — избегай изменяемых глобальных переменных | `gochecknoglobals` (частично, флагает любые глобальные vars, не только mutable) | Частичное |
-| 20 | **Avoid Embedding Types in Public Structs** — не встраивай типы в экспортируемые структуры | Нет | — |
+| 20 | **Avoid Embedding Types in Public Structs** — не встраивай типы в экспортируемые структуры | `uberlint: publicembed` | Полное |
 | 21 | **Avoid Using Built-In Names** — не затеняй предопределённые идентификаторы | `predeclared` (флагает затенение predeclared identifiers); `govet: shadow` | Полное |
 | 22 | **Avoid `init()`** — избегай init-функций | `gochecknoinits` (флагает наличие init()); revive: `add-constant` правило `gochecknoinits` | Полное |
 | 23 | **Exit in Main** — os.Exit/log.Fatal только в main() | `revive: deep-exit` (флагает os.Exit/log.Fatal вне main/init) | Полное |
@@ -82,7 +82,7 @@
 | # | Рекомендация | Линтер / Инструмент | Покрытие |
 |---|---|---|---|
 | 29 | **Prefer strconv over fmt** — strconv быстрее fmt | `perfsprint` (флагает fmt.Sprint/Sprintf когда можно использовать strconv) | Полное |
-| 30 | **Avoid repeated string-to-byte conversions** — не конвертируй `[]byte("str")` в цикле | Нет | — |
+| 30 | **Avoid repeated string-to-byte conversions** — не конвертируй `[]byte("str")` в цикле | `uberlint: stringbytes` | Полное |
 | 31 | **Prefer Specifying Container Capacity** — указывай capacity для slices и maps | `prealloc` (предлагает prealloc для slices перед append); `makezero` (флагает slices без начальной capacity) | Частичное |
 
 ---
@@ -101,14 +101,14 @@
 | 39 | **Function Grouping and Ordering** — группировка по receiver, порядок вызовов | Нет | — |
 | 40 | **Reduce Nesting** — уменьшай вложенность, early return | `revive: early-return` (предлагает ранний возврат); `nestif` (флагает глубокую вложенность if) | Частичное |
 | 41 | **Unnecessary Else** — убирай лишний else | `revive: early-return` (предлагает убрать else через early return) | Полное |
-| 42 | **Top-level Variable Declarations** — не указывай тип в var, если он совпадает | Нет | — |
-| 43 | **Prefix Unexported Globals with _** — `_defaultPort` вместо `defaultPort` | Нет | — |
-| 44 | **Embedding in Structs** — embedded types сверху, пустая строка-разделитель | Нет | — |
-| 45 | **Local Variable Declarations** — предпочитай `:=` вместо `var s = "foo"` | Нет | — |
-| 46 | **nil is a valid slice** — возвращай nil вместо `[]int{}` | Нет | — |
+| 42 | **Top-level Variable Declarations** — не указывай тип в var, если он совпадает | `uberlint: vartype` | Полное |
+| 43 | **Prefix Unexported Globals with _** — `_defaultPort` вместо `defaultPort` | `uberlint: globalprefix` | Полное |
+| 44 | **Embedding in Structs** — embedded types сверху, пустая строка-разделитель | `uberlint: embedlayout` | Частичное |
+| 45 | **Local Variable Declarations** — предпочитай `:=` вместо `var s = "foo"` | `uberlint: localvar` | Полное |
+| 46 | **nil is a valid slice** — возвращай nil вместо `[]int{}` | `uberlint: nilslice` | Полное |
 | 47 | **Reduce Scope of Variables** — сокращай область видимости | Нет | — |
-| 48 | **Avoid Naked Parameters** — добавляй комментарии `/* ... */` для неочевидных параметров | Нет | — |
-| 49 | **Use Raw String Literals to Avoid Escaping** — используй backticks | Нет | — |
+| 48 | **Avoid Naked Parameters** — добавляй комментарии `/* ... */` для неочевидных параметров | `uberlint: nakedparams` | Частичное |
+| 49 | **Use Raw String Literals to Avoid Escaping** — используй backticks | `uberlint: rawstring` | Полное |
 
 ---
 
@@ -117,10 +117,10 @@
 | # | Рекомендация | Линтер / Инструмент | Покрытие |
 |---|---|---|---|
 | 50 | **Use Field Names to Initialize Structs** — всегда указывай имена полей | `govet` (проверяет unkeyed composite literals, сам гайд говорит "enforced by go vet") | Частичное (для внешних пакетов) |
-| 51 | **Omit Zero Value Fields in Structs** — опускай нулевые поля | Нет | — |
-| 52 | **Use `var` for Zero Value Structs** — `var user User` вместо `user := User{}` | Нет | — |
-| 53 | **Initializing Struct References** — `&T{}` вместо `new(T)` | Нет | — |
-| 54 | **Initializing Maps** — `make()` для пустых, литералы для фиксированных | Нет | — |
+| 51 | **Omit Zero Value Fields in Structs** — опускай нулевые поля | `uberlint: zerofields` | Полное |
+| 52 | **Use `var` for Zero Value Structs** — `var user User` вместо `user := User{}` | `uberlint: zerovar` | Полное |
+| 53 | **Initializing Struct References** — `&T{}` вместо `new(T)` | `uberlint: newref` | Полное |
+| 54 | **Initializing Maps** — `make()` для пустых, литералы для фиксированных | `uberlint: mapinit` | Частичное |
 
 ---
 
@@ -128,7 +128,7 @@
 
 | # | Рекомендация | Линтер / Инструмент | Покрытие |
 |---|---|---|---|
-| 55 | **Format Strings outside Printf** — делай format strings `const` | Нет (govet: printf проверяет format string, но не проверяет что она const) | — |
+| 55 | **Format Strings outside Printf** — делай format strings `const` | `uberlint: constprintf` | Полное |
 | 56 | **Naming Printf-style Functions** — функции Printf-стиля должны заканчиваться на `f` | `govet: printf` (проверяет format strings для известных Printf-функций, кастомные через `-printfuncs`) | Полное |
 
 ---
@@ -148,18 +148,18 @@
 
 | Категория | Всего правил | Есть линтер | Частично | Нет линтера |
 |---|---|---|---|---|
-| Структуры данных и интерфейсы | 8 | 0 | 2 | 6 |
-| Работа со временем | 3 | 0 | 0 | 3 |
+| Структуры данных и интерфейсы | 8 | 3 | 2 | 3 |
+| Работа со временем | 3 | 0 | 1 | 2 |
 | Обработка ошибок | 5 | 3 | 0 | 2 |
-| Управление потоком | 8 | 2 | 2 | 4 |
+| Управление потоком | 8 | 6 | 2 | 0 |
 | Сериализация | 1 | 1 | 0 | 0 |
 | Горутины | 3 | 0 | 1 | 2 |
-| Performance | 3 | 1 | 1 | 1 |
-| Style | 18 | 3 | 5 | 10 |
-| Initializing Structs | 5 | 0 | 1 | 4 |
-| Printf | 2 | 1 | 0 | 1 |
+| Performance | 3 | 2 | 1 | 0 |
+| Style | 18 | 9 | 6 | 3 |
+| Initializing Structs | 5 | 3 | 2 | 0 |
+| Printf | 2 | 2 | 0 | 0 |
 | Patterns | 4 | 0 | 1 | 3 |
-| **ИТОГО** | **60** | **11** | **14** | **35** |
+| **ИТОГО** | **60** | **29** | **16** | **15** |
 
 ---
 
@@ -168,7 +168,8 @@
 Для максимального покрытия Uber Go Style Guide:
 
 ```yaml
-# .golangci.yml
+version: "2"
+
 linters:
   enable:
     # Базовые (рекомендованы самим Uber)
@@ -177,6 +178,28 @@ linters:
     - revive
     - govet
     - staticcheck
+
+    # uberlint — Uber Go Style Guide (каждый анализатор включается отдельно)
+    - nopanic       # Don't Panic (#17)
+    - chansize      # Channel Size is One or None (#7)
+    - enumstart     # Start Enums at One (#8)
+    - newref        # Initializing Struct References (#53)
+    - nilslice      # nil is a valid slice (#46)
+    - zerovar       # Use var for Zero Value Structs (#52)
+    - stringbytes   # Avoid repeated string-to-byte conversions (#30)
+    - globalprefix  # Prefix Unexported Globals with _ (#43)
+    - vartype       # Top-level Variable Declarations (#42)
+    - ifaceptr      # Pointers to Interfaces (#1)
+    - atomicstd     # Use sync/atomic typed values (#18)
+    - rawstring     # Use Raw String Literals to Avoid Escaping (#49)
+    - publicembed   # Avoid Embedding Types in Public Structs (#20)
+    - embedlayout   # Embedding in Structs (#44)
+    - localvar      # Local Variable Declarations (#45)
+    - zerofields    # Omit Zero Value Fields in Structs (#51)
+    - mapinit       # Initializing Maps (#54)
+    - constprintf   # Format Strings outside Printf (#55)
+    - nakedparams   # Avoid Naked Parameters (#48)
+    - timefield     # time.Time/Duration with external systems (#11)
 
     # Дополнительные для покрытия Uber Style Guide
     - errname          # Error Naming (#14)
@@ -193,58 +216,68 @@ linters:
     - grouper          # Group Similar Declarations (#34)
     - importas         # Import Aliasing (#38)
     - nestif           # Reduce Nesting (#40)
-
-linters-settings:
-  lll:
-    line-length: 99
-  revive:
-    rules:
-      - name: deep-exit       # Exit in Main (#23)
-      - name: early-return    # Reduce Nesting + Unnecessary Else (#40, #41)
-  govet:
-    enable:
-      - shadow                # Avoid Using Built-In Names (#21)
-      - copylocks             # Zero-value Mutexes (#4)
+  settings:
+    custom:
+      uberlint:
+        type: "module"
+        description: "Uber Go Style Guide linter"
+    lll:
+      line-length: 99
+    revive:
+      rules:
+        - name: deep-exit       # Exit in Main (#23)
+        - name: early-return    # Reduce Nesting + Unnecessary Else (#40, #41)
+    govet:
+      enable:
+        - shadow                # Avoid Using Built-In Names (#21)
+        - copylocks             # Zero-value Mutexes (#4)
 ```
 
 ---
 
-## Правила БЕЗ линтера (ниша для uberlint)
+## Правила покрытые uberlint (20 реализовано)
 
-Следующие 35 правил не имеют автоматического линтера — это кандидаты для реализации:
+| # | Правило | Analyzer ID |
+|---|---|---|
+| 1 | Pointers to Interfaces | `ifaceptr` |
+| 7 | Channel Size is One or None | `chansize` |
+| 8 | Start Enums at One | `enumstart` |
+| 17 | Don't Panic | `nopanic` |
+| 18 | Use sync/atomic typed values | `atomicstd` |
+| 30 | Avoid repeated string-to-byte conversions | `stringbytes` |
+| 42 | Top-level Variable Declarations | `vartype` |
+| 43 | Prefix Unexported Globals with _ | `globalprefix` |
+| 46 | nil is a valid slice | `nilslice` |
+| 49 | Use Raw String Literals to Avoid Escaping | `rawstring` |
+| 52 | Use var for Zero Value Structs | `zerovar` |
+| 53 | Initializing Struct References | `newref` |
+| 11 | time.Time/Duration with external systems | `timefield` |
+| 20 | Avoid Embedding Types in Public Structs | `publicembed` |
+| 44 | Embedding in Structs | `embedlayout` |
+| 45 | Local Variable Declarations | `localvar` |
+| 48 | Avoid Naked Parameters | `nakedparams` |
+| 51 | Omit Zero Value Fields in Structs | `zerofields` |
+| 54 | Initializing Maps | `mapinit` |
+| 55 | Format Strings outside Printf | `constprintf` |
 
-1. Pointers to Interfaces
-2. Verify Interface Compliance
-3. Copy Slices and Maps at Boundaries
-4. Defer to Clean Up
-5. Channel Size is One or None
-6. Start Enums at One
-7. Use time.Time for instants
-8. Use time.Duration for periods
-9. time.Time/Duration with external systems (units in field names)
-10. Error Types (proper pattern choice)
-11. Handle Errors Once
-12. Don't Panic
-13. Use sync/atomic typed values (instead of go.uber.org/atomic)
-14. Avoid Embedding Types in Public Structs
-15. Don't fire-and-forget goroutines
-16. Wait for goroutines to exit
-17. Avoid repeated string-to-byte conversions
-18. Function Grouping and Ordering
-19. Top-level Variable Declarations (omit redundant type)
-20. Prefix Unexported Globals with _
-21. Embedding in Structs (position + empty line)
-22. Local Variable Declarations (prefer :=)
-23. nil is a valid slice
-24. Reduce Scope of Variables
-25. Avoid Naked Parameters
-26. Use Raw String Literals to Avoid Escaping
-27. Omit Zero Value Fields in Structs
-28. Use var for Zero Value Structs
-29. Initializing Struct References (&T{} vs new(T))
-30. Initializing Maps (make vs literal)
-31. Format Strings outside Printf (make const)
-32. Test Tables
-33. Avoid Unnecessary Complexity in Table Tests
-34. Functional Options
-35. Be Consistent (subjective)
+---
+
+## Правила БЕЗ линтера (ниша для uberlint Phase 3+)
+
+Следующие 15 правил не имеют автоматического линтера — кандидаты для следующей фазы:
+
+1. Verify Interface Compliance
+2. Copy Slices and Maps at Boundaries
+3. Defer to Clean Up
+4. Use time.Time for instants
+5. Use time.Duration for periods
+6. Error Types (proper pattern choice)
+7. Handle Errors Once
+8. Don't fire-and-forget goroutines
+9. Wait for goroutines to exit
+10. Function Grouping and Ordering
+11. Reduce Scope of Variables
+12. Test Tables
+13. Avoid Unnecessary Complexity in Table Tests
+14. Functional Options
+15. Be Consistent (subjective)
