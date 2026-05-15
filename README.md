@@ -41,7 +41,7 @@ Code review should be about design, correctness, and trade-offs, not repeatedly 
 | `localvar` | Prefer `:=` for local variables with inferred types. |
 | `zerofields` | Omit explicit zero-value fields in struct literals. |
 | `mapinit` | Prefer `make(map[K]V)` for empty map initialization. |
-| `constprintf` | Move printf format strings into constants. |
+| `constprintf` | Use constants for printf format strings stored outside call sites. |
 | `nakedparams` | Avoid calls with multiple naked literal arguments. |
 | `timefield` | Require unit suffixes for serialized numeric time fields. |
 

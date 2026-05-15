@@ -80,7 +80,7 @@ Expanded `analysistest` fixtures with additional unit-testable cases:
 
 - `atomicstd`: aliased `sync/atomic`, CAS/swap operations, non-atomic selector false positive guard.
 - `chansize`: constant expressions, const identifiers, non-channel `make` false positive guard.
-- `constprintf`: selector and local printf-style calls, non-printf call guard.
+- `constprintf`: non-const format variables, selector/local printf-style calls, inline literal and const guards.
 - `embedlayout`: pointer embedded fields and multiple embedded fields.
 - `enumstart`: `iota + 0`, same-line suppression, non-iota const groups.
 - `ifaceptr`: pointer-to-interface in type aliases, top-level vars, and local vars.

@@ -109,7 +109,7 @@ GOCACHE="$(pwd)/.gocache" ./custom-gcl run ./...
 | `localvar` | Local Variable Declarations | P2 | `var x = value` inside functions reports; package-level vars pass. |
 | `zerofields` | Omit Zero Value Fields in Structs | P1 | Explicit zero fields report; non-zero fields and semantically meaningful values pass. |
 | `mapinit` | Initializing Maps | P1 | Empty map literals report; non-empty map literals pass. |
-| `constprintf` | Format Strings outside Printf | P2 | Inline printf format strings report; const format strings pass. |
+| `constprintf` | Format Strings outside Printf | P2 | Non-const format variables report; inline literals and const format strings pass. |
 | `nakedparams` | Avoid Naked Parameters | P2 | Multiple naked literal args report; named constants or commented literals pass if supported. |
 | `timefield` | Time Units in Serialized Fields | P1 | Serialized numeric time-like fields without units report; unit-suffixed fields pass. |
 
@@ -764,4 +764,3 @@ Command output, fixture code, screenshots, or links.
 
 User impact, CI impact, and workaround if available.
 ```
-
