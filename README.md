@@ -180,6 +180,14 @@ golangci-lint custom -v
 ./custom-gcl run ./...
 ```
 
+- If diagnostics still look stale after upgrading, for example `zerovar: zerovar: ...`,
+  clear the `golangci-lint` cache and run again:
+
+```bash
+./custom-gcl cache clean
+./custom-gcl run ./...
+```
+
 - If you are testing a local checkout, make sure `.custom-gcl.yml` points to that checkout with `path`.
 
 ## CI Example
