@@ -67,7 +67,7 @@ version: v2.0.0
 name: custom-gcl
 plugins:
   - module: github.com/aagumin/uberlint
-    version: v0.1.2
+    version: v0.1.4
 ```
 
 If you are trying a local checkout before a release is available, use `path` instead:
