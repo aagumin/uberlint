@@ -7,6 +7,10 @@ type PublicBad struct {
 	Name   string
 }
 
+type PublicPointerBad struct {
+	*Logger // want "avoid embedding types in public structs"
+}
+
 type PublicGood struct {
 	Log Logger
 }

@@ -12,6 +12,10 @@ type BadStruct struct {
 	R *Reader // want "avoid pointer to interface"
 }
 
+type BadAlias *Reader // want "avoid pointer to interface"
+
+var badVar *Reader // want "avoid pointer to interface"
+
 func good(r Reader) {}
 
 type GoodStruct struct {
@@ -21,3 +25,14 @@ type GoodStruct struct {
 func badReturn() *io.Reader { // want "avoid pointer to interface"
 	return nil
 }
+
+func badLocal() {
+	var r *Reader // want "avoid pointer to interface"
+	_ = r
+}
+
+func goodConcretePointer(r *concreteReader) {}
+
+type concreteReader struct{}
+
+func (*concreteReader) Read() {}

@@ -2,6 +2,7 @@ package analyzers
 
 import (
 	"go/ast"
+	"go/constant"
 	"go/token"
 	"strings"
 
@@ -31,7 +32,7 @@ func runEnumStart(pass *analysis.Pass) (interface{}, error) {
 			}
 			// Check if first spec starts at zero without offset
 			firstSpec := genDecl.Specs[0].(*ast.ValueSpec)
-			if firstSpec.Values == nil || isPlainIota(firstSpec.Values) {
+			if enumStartsAtZero(pass, firstSpec) {
 				if hasEnumStartSuppression(genDecl, firstSpec) {
 					continue
 				}
@@ -61,12 +62,56 @@ func groupUsesIota(genDecl *ast.GenDecl) bool {
 	return false
 }
 
+func enumStartsAtZero(pass *analysis.Pass, firstSpec *ast.ValueSpec) bool {
+	if firstSpec.Values == nil || isPlainIota(firstSpec.Values) || isIotaWithZeroOffset(firstSpec.Values) {
+		return true
+	}
+	if len(firstSpec.Values) != 1 {
+		return false
+	}
+	value := pass.TypesInfo.Types[firstSpec.Values[0]].Value
+	return value != nil && constant.Sign(value) == 0
+}
+
 func isPlainIota(values []ast.Expr) bool {
 	if len(values) != 1 {
 		return false
 	}
 	ident, ok := values[0].(*ast.Ident)
 	return ok && ident.Name == "iota"
+}
+
+func isIotaWithZeroOffset(values []ast.Expr) bool {
+	if len(values) != 1 {
+		return false
+	}
+	return isIotaZeroExpr(values[0])
+}
+
+func isIotaZeroExpr(expr ast.Expr) bool {
+	switch expr := expr.(type) {
+	case *ast.BinaryExpr:
+		switch expr.Op {
+		case token.ADD:
+			return (isIotaIdent(expr.X) && isZeroLiteral(expr.Y)) ||
+				(isZeroLiteral(expr.X) && isIotaIdent(expr.Y))
+		case token.SUB:
+			return isIotaIdent(expr.X) && isZeroLiteral(expr.Y)
+		}
+	case *ast.ParenExpr:
+		return isIotaZeroExpr(expr.X)
+	}
+	return false
+}
+
+func isIotaIdent(expr ast.Expr) bool {
+	ident, ok := expr.(*ast.Ident)
+	return ok && ident.Name == "iota"
+}
+
+func isZeroLiteral(expr ast.Expr) bool {
+	lit, ok := expr.(*ast.BasicLit)
+	return ok && lit.Kind == token.INT && lit.Value == "0"
 }
 
 func containsIota(expr ast.Expr) bool {

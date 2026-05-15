@@ -5,11 +5,15 @@ type User struct {
 	Age  int
 }
 
+type Alias User
 type MyMap map[string]int
 
 func bad() {
 	u := User{} // want "use var declaration instead"
 	_ = u
+
+	a := Alias{} // want "use var declaration instead"
+	_ = a
 }
 
 func good() {
@@ -18,6 +22,9 @@ func good() {
 
 	initialized := User{Name: "Alice"} // OK: has non-zero fields
 	_ = initialized
+
+	var a Alias
+	_ = a
 }
 
 func goodMapNotStruct() {

@@ -8,6 +8,12 @@ func bad(w io.Writer) {
 	}
 }
 
+func badRange(w io.Writer, values []int) {
+	for range values {
+		w.Write([]byte("Hello range")) // want "avoid repeated string-to-byte conversion"
+	}
+}
+
 func good(w io.Writer) {
 	data := []byte("Hello world")
 	for i := 0; i < 10; i++ {

@@ -4,8 +4,11 @@ type MyStruct struct {
 	Name string
 }
 
+type Alias MyStruct
+
 func bad() {
 	_ = new(MyStruct) // want "instead of new"
+	_ = new(Alias)    // want "instead of new"
 }
 
 func good() {

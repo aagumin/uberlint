@@ -2,6 +2,7 @@ package analyzers
 
 import (
 	"go/ast"
+	"go/types"
 
 	"golang.org/x/tools/go/analysis"
 )
@@ -20,11 +21,23 @@ func runMapInit(pass *analysis.Pass) (interface{}, error) {
 			if !ok || len(lit.Elts) != 0 {
 				return true
 			}
-			if _, ok := lit.Type.(*ast.MapType); ok {
+			if isMapLiteral(pass, lit) {
 				pass.Reportf(lit.Pos(), "use make for empty map initialization")
 			}
 			return true
 		})
 	}
 	return nil, nil
+}
+
+func isMapLiteral(pass *analysis.Pass, lit *ast.CompositeLit) bool {
+	if _, ok := lit.Type.(*ast.MapType); ok {
+		return true
+	}
+	t := pass.TypesInfo.TypeOf(lit)
+	if t == nil {
+		return false
+	}
+	_, ok := t.Underlying().(*types.Map)
+	return ok
 }

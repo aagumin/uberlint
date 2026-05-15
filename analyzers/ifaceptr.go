@@ -35,6 +35,12 @@ func runIfacePtr(pass *analysis.Pass) (interface{}, error) {
 						checkPointerType(pass, field.Type)
 					}
 				}
+			case *ast.ValueSpec:
+				if n.Type != nil {
+					checkPointerType(pass, n.Type)
+				}
+			case *ast.TypeSpec:
+				checkPointerType(pass, n.Type)
 			}
 			return true
 		})
