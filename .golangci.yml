@@ -3,27 +3,7 @@ version: "2"
 linters:
   default: none
   enable:
-    # uberlint — Uber Go Style Guide (каждый анализатор отдельно)
-    - nopanic       # Don't Panic
-    - chansize      # Channel Size is One or None
-    - enumstart     # Start Enums at One
-    - newref        # Initializing Struct References (&T{} vs new(T))
-    - nilslice      # nil is a valid slice
-    - zerovar       # Use var for Zero Value Structs
-    - stringbytes   # Avoid repeated string-to-byte conversions
-    - globalprefix  # Prefix Unexported Globals with _
-    - vartype       # Top-level Variable Declarations (omit redundant type)
-    - ifaceptr      # Pointers to Interfaces
-    - atomicstd     # Use sync/atomic typed values
-    - rawstring     # Use Raw String Literals to Avoid Escaping
-    - publicembed   # Avoid Embedding Types in Public Structs
-    - embedlayout   # Embedding in Structs
-    - localvar      # Local Variable Declarations
-    - zerofields    # Omit Zero Value Fields in Structs
-    - mapinit       # Initializing Maps
-    - constprintf   # Format Strings outside Printf
-    - nakedparams   # Avoid Naked Parameters
-    - timefield     # Time fields with external systems need units
+    - uberlint
   settings:
     custom:
       uberlint:

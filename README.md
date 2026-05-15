@@ -17,7 +17,7 @@ Code review should be about design, correctness, and trade-offs, not repeatedly 
 - **Uber Go Style Guide coverage** for rules that are missing or only partially covered by standard linters.
 - **Native `golangci-lint` integration** through the module plugin system.
 - **Small, explainable analyzers** built on `golang.org/x/tools/go/analysis`.
-- **Rule-by-rule enablement**, so teams can adopt strictness gradually.
+- **One custom linter entry** that runs the full Uber Style Guide analyzer set.
 - **Standalone runner support** for development and debugging outside `golangci-lint`.
 
 ## Included Linters
@@ -67,7 +67,7 @@ version: v2.0.0
 name: custom-gcl
 plugins:
   - module: github.com/aagumin/uberlint
-    version: v0.1.0
+    version: v0.1.1
 ```
 
 If you are trying a local checkout before a release is available, use `path` instead:
@@ -88,26 +88,7 @@ version: "2"
 linters:
   default: none
   enable:
-    - nopanic
-    - chansize
-    - enumstart
-    - newref
-    - nilslice
-    - zerovar
-    - stringbytes
-    - globalprefix
-    - vartype
-    - ifaceptr
-    - atomicstd
-    - rawstring
-    - publicembed
-    - embedlayout
-    - localvar
-    - zerofields
-    - mapinit
-    - constprintf
-    - nakedparams
-    - timefield
+    - uberlint
   settings:
     custom:
       uberlint:
@@ -122,21 +103,22 @@ golangci-lint custom -v
 ./custom-gcl run ./...
 ```
 
-The first command reads `.custom-gcl.yml` and builds a local `custom-gcl` binary. The second command runs that binary with the `uberlint` analyzers enabled by `.golangci.yml`.
+The first command reads `.custom-gcl.yml` and builds a local `custom-gcl` binary. The second command runs that binary with the `uberlint` plugin enabled by `.golangci.yml`.
 
-## Enabling Only Some Rules
+Important: enable `uberlint`, not individual analyzer names like `nopanic` or `ifaceptr`. The module plugin registers one golangci-lint linter named `uberlint`; that linter runs the analyzers listed below.
 
-You can enable only the rules your team is ready to enforce:
+## Troubleshooting
+
+### `plugin "uberlint" not found`
+
+This means the `custom-gcl` binary was built without the `uberlint` module plugin registration. Check these points:
+
+- `.golangci.yml` must enable `uberlint`, not individual analyzer names:
 
 ```yaml
-version: "2"
-
 linters:
-  default: none
   enable:
-    - nopanic
-    - enumstart
-    - ifaceptr
+    - uberlint
   settings:
     custom:
       uberlint:
@@ -144,7 +126,15 @@ linters:
         description: "Uber Go Style Guide linter"
 ```
 
-This is a practical way to adopt `uberlint` incrementally: start with low-noise correctness and consistency checks, then add more opinionated style rules as the codebase converges.
+- Rebuild the custom binary after changing `.custom-gcl.yml` or upgrading `uberlint`:
+
+```bash
+rm -f ./custom-gcl
+golangci-lint custom -v
+./custom-gcl run ./...
+```
+
+- If you are testing a local checkout, make sure `.custom-gcl.yml` points to that checkout with `path`.
 
 ## CI Example
 

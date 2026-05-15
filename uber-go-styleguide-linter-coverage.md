@@ -179,27 +179,8 @@ linters:
     - govet
     - staticcheck
 
-    # uberlint — Uber Go Style Guide (каждый анализатор включается отдельно)
-    - nopanic       # Don't Panic (#17)
-    - chansize      # Channel Size is One or None (#7)
-    - enumstart     # Start Enums at One (#8)
-    - newref        # Initializing Struct References (#53)
-    - nilslice      # nil is a valid slice (#46)
-    - zerovar       # Use var for Zero Value Structs (#52)
-    - stringbytes   # Avoid repeated string-to-byte conversions (#30)
-    - globalprefix  # Prefix Unexported Globals with _ (#43)
-    - vartype       # Top-level Variable Declarations (#42)
-    - ifaceptr      # Pointers to Interfaces (#1)
-    - atomicstd     # Use sync/atomic typed values (#18)
-    - rawstring     # Use Raw String Literals to Avoid Escaping (#49)
-    - publicembed   # Avoid Embedding Types in Public Structs (#20)
-    - embedlayout   # Embedding in Structs (#44)
-    - localvar      # Local Variable Declarations (#45)
-    - zerofields    # Omit Zero Value Fields in Structs (#51)
-    - mapinit       # Initializing Maps (#54)
-    - constprintf   # Format Strings outside Printf (#55)
-    - nakedparams   # Avoid Naked Parameters (#48)
-    - timefield     # time.Time/Duration with external systems (#11)
+    # uberlint — custom module plugin with all uberlint analyzers.
+    - uberlint
 
     # Дополнительные для покрытия Uber Style Guide
     - errname          # Error Naming (#14)
