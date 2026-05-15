@@ -24,7 +24,7 @@ func runEmbedLayout(pass *analysis.Pass) (interface{}, error) {
 			for _, field := range structType.Fields.List {
 				if len(field.Names) == 0 {
 					if seenNamed {
-						pass.Reportf(field.Pos(), "embedlayout: embedded fields should be grouped before named fields")
+						pass.Reportf(field.Pos(), "embedded fields should be grouped before named fields")
 					}
 					continue
 				}

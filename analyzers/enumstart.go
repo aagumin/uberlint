@@ -35,7 +35,7 @@ func runEnumStart(pass *analysis.Pass) (interface{}, error) {
 				if hasEnumStartSuppression(genDecl, firstSpec) {
 					continue
 				}
-				pass.Reportf(firstSpec.Pos(), "enumstart: enum should start at a non-zero value")
+				pass.Reportf(firstSpec.Pos(), "enum should start at a non-zero value")
 			}
 		}
 	}

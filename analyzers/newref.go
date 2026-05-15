@@ -30,7 +30,7 @@ func runNewRef(pass *analysis.Pass) (interface{}, error) {
 				return true
 			}
 
-			pass.Reportf(call.Pos(), "newref: use &T{} instead of new(T) for consistency with struct initialization")
+			pass.Reportf(call.Pos(), "use &T{} instead of new(T) for consistency with struct initialization")
 			return true
 		})
 	}

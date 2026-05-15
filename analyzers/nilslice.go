@@ -26,11 +26,11 @@ func runNilSlice(pass *analysis.Pass) (interface{}, error) {
 				switch n := result.(type) {
 				case *ast.CompositeLit:
 					if isEmptySliceLiteral(n) {
-						pass.Reportf(n.Pos(), "nilslice: use nil instead of empty slice literal in return")
+						pass.Reportf(n.Pos(), "use nil instead of empty slice literal in return")
 					}
 				case *ast.CallExpr:
 					if isEmptyMakeSlice(n) {
-						pass.Reportf(n.Pos(), "nilslice: use nil instead of make([]T, 0) in return")
+						pass.Reportf(n.Pos(), "use nil instead of make([]T, 0) in return")
 					}
 				}
 			}

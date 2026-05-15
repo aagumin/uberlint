@@ -37,7 +37,7 @@ func runVarType(pass *analysis.Pass) (interface{}, error) {
 					continue
 				}
 				if types.Identical(declaredType, exprType) {
-					pass.Reportf(vs.Type.Pos(), "vartype: omit redundant type in var declaration, the expression already returns %s", declaredType)
+					pass.Reportf(vs.Type.Pos(), "omit redundant type in var declaration, the expression already returns %s", declaredType)
 				}
 			}
 		}

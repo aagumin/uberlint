@@ -45,7 +45,7 @@ func runChanSize(pass *analysis.Pass) (interface{}, error) {
 				return true
 			}
 			if intVal > 1 {
-				pass.Reportf(sizeArg.Pos(), "chansize: channel size should be 0 or 1, got %d", intVal)
+				pass.Reportf(sizeArg.Pos(), "channel size should be 0 or 1, got %d", intVal)
 			}
 			return true
 		})

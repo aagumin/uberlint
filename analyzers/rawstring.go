@@ -47,7 +47,7 @@ func runRawString(pass *analysis.Pass) (interface{}, error) {
 			if len(unquoted) < 6 {
 				return true
 			}
-			pass.Reportf(lit.Pos(), "rawstring: use raw string literal (backticks) to avoid escaping quotes")
+			pass.Reportf(lit.Pos(), "use raw string literal (backticks) to avoid escaping quotes")
 			return true
 		})
 	}

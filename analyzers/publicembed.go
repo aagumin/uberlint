@@ -31,7 +31,7 @@ func runPublicEmbed(pass *analysis.Pass) (interface{}, error) {
 				}
 				for _, field := range structType.Fields.List {
 					if len(field.Names) == 0 {
-						pass.Reportf(field.Pos(), "publicembed: avoid embedding types in public structs")
+						pass.Reportf(field.Pos(), "avoid embedding types in public structs")
 					}
 				}
 			}

@@ -31,7 +31,7 @@ func runLocalVar(pass *analysis.Pass) (interface{}, error) {
 					if !ok || vs.Type != nil || len(vs.Values) == 0 {
 						continue
 					}
-					pass.Reportf(vs.Pos(), "localvar: use short variable declaration instead of local var with initializer")
+					pass.Reportf(vs.Pos(), "use short variable declaration instead of local var with initializer")
 				}
 				return true
 			})

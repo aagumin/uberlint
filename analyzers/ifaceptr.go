@@ -52,6 +52,6 @@ func checkPointerType(pass *analysis.Pass, expr ast.Expr) {
 		return
 	}
 	if _, isIface := t.Underlying().(*types.Interface); isIface {
-		pass.Reportf(star.Pos(), "ifaceptr: avoid pointer to interface, interfaces already contain a pointer to data")
+		pass.Reportf(star.Pos(), "avoid pointer to interface, interfaces already contain a pointer to data")
 	}
 }

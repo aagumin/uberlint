@@ -26,7 +26,7 @@ func runConstPrintf(pass *analysis.Pass) (interface{}, error) {
 			if !ok || lit.Kind != token.STRING {
 				return true
 			}
-			pass.Reportf(lit.Pos(), "constprintf: move printf format string to a const")
+			pass.Reportf(lit.Pos(), "move printf format string to a const")
 			return true
 		})
 	}

@@ -28,7 +28,7 @@ func runZeroFields(pass *analysis.Pass) (interface{}, error) {
 					continue
 				}
 				if isZeroValueExpr(pass, kv.Value) {
-					pass.Reportf(kv.Value.Pos(), "zerofields: omit zero-value field from struct literal")
+					pass.Reportf(kv.Value.Pos(), "omit zero-value field from struct literal")
 				}
 			}
 			return true

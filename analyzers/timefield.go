@@ -28,7 +28,7 @@ func runTimeField(pass *analysis.Pass) (interface{}, error) {
 				}
 				for _, name := range field.Names {
 					if isTimeLikeName(name.Name) && !hasTimeUnitSuffix(name.Name) {
-						pass.Reportf(name.Pos(), "timefield: include time unit in serialized numeric field name")
+						pass.Reportf(name.Pos(), "include time unit in serialized numeric field name")
 					}
 				}
 			}

@@ -60,7 +60,7 @@ func checkPanicCall(pass *analysis.Pass, stack []ast.Node) {
 		}
 	}
 
-	pass.Reportf(call.Pos(), "nopanic: avoid panic in production code, return an error instead")
+	pass.Reportf(call.Pos(), "avoid panic in production code, return an error instead")
 }
 
 func enclosingFuncDecl(stack []ast.Node) *ast.FuncDecl {

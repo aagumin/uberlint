@@ -36,7 +36,7 @@ func runZeroVar(pass *analysis.Pass) (interface{}, error) {
 			if !isStructType(pass, lit) {
 				return true
 			}
-			pass.Reportf(lit.Pos(), "zerovar: use var declaration instead of short assignment with zero-value struct")
+			pass.Reportf(lit.Pos(), "use var declaration instead of short assignment with zero-value struct")
 			return true
 		})
 	}

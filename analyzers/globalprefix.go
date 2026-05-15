@@ -44,7 +44,7 @@ func runGlobalPrefix(pass *analysis.Pass) (interface{}, error) {
 					if strings.HasPrefix(name.Name, "err") && len(name.Name) > 3 {
 						continue // err prefix for errors
 					}
-					pass.Reportf(name.Pos(), "globalprefix: prefix unexported global with _")
+					pass.Reportf(name.Pos(), "prefix unexported global with _")
 				}
 			}
 		}

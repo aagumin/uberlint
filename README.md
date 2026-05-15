@@ -17,7 +17,7 @@ Code review should be about design, correctness, and trade-offs, not repeatedly 
 - **Uber Go Style Guide coverage** for rules that are missing or only partially covered by standard linters.
 - **Native `golangci-lint` integration** through the module plugin system.
 - **Small, explainable analyzers** built on `golang.org/x/tools/go/analysis`.
-- **One custom linter entry** that runs the full Uber Style Guide analyzer set.
+- **Rule selection through plugin settings**, so teams can adopt strictness gradually.
 - **Standalone runner support** for development and debugging outside `golangci-lint`.
 
 ## Included Linters
@@ -67,7 +67,7 @@ version: v2.0.0
 name: custom-gcl
 plugins:
   - module: github.com/aagumin/uberlint
-    version: v0.1.1
+    version: v0.1.2
 ```
 
 If you are trying a local checkout before a release is available, use `path` instead:
@@ -106,6 +106,52 @@ golangci-lint custom -v
 The first command reads `.custom-gcl.yml` and builds a local `custom-gcl` binary. The second command runs that binary with the `uberlint` plugin enabled by `.golangci.yml`.
 
 Important: enable `uberlint`, not individual analyzer names like `nopanic` or `ifaceptr`. The module plugin registers one golangci-lint linter named `uberlint`; that linter runs the analyzers listed below.
+
+## Selecting Rules
+
+`golangci-lint` sees one custom linter named `uberlint`. Individual checks are selected through plugin settings.
+
+To run only specific analyzers:
+
+```yaml
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - uberlint
+  settings:
+    custom:
+      uberlint:
+        type: "module"
+        description: "Uber Go Style Guide linter"
+        settings:
+          enable:
+            - nopanic
+            - ifaceptr
+            - enumstart
+```
+
+To run all analyzers except a few:
+
+```yaml
+version: "2"
+
+linters:
+  enable:
+    - uberlint
+  settings:
+    custom:
+      uberlint:
+        type: "module"
+        description: "Uber Go Style Guide linter"
+        settings:
+          disable:
+            - nakedparams
+            - constprintf
+```
+
+Use either `enable` or `disable`, not both. Unknown analyzer names fail the run with an explicit error.
 
 ## Troubleshooting
 

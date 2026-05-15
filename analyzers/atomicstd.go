@@ -58,7 +58,7 @@ func runAtomicStd(pass *analysis.Pass) (interface{}, error) {
 			if !isAtomicPackage(pass, sel) {
 				return true
 			}
-			pass.Reportf(call.Pos(), "atomicstd: use %s type instead of raw atomic.%s", typedName, sel.Sel.Name)
+			pass.Reportf(call.Pos(), "use %s type instead of raw atomic.%s", typedName, sel.Sel.Name)
 			return true
 		})
 	}

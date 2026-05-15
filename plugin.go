@@ -1,6 +1,8 @@
 package uberlint
 
 import (
+	"fmt"
+
 	"github.com/aagumin/uberlint/analyzers"
 	"github.com/golangci/plugin-module-register/register"
 	"golang.org/x/tools/go/analysis"
@@ -10,17 +12,33 @@ func init() {
 	register.Plugin("uberlint", New)
 }
 
+// Settings controls which analyzers the uberlint plugin runs.
+type Settings struct {
+	Enable  []string `json:"enable"`
+	Disable []string `json:"disable"`
+}
+
 // Plugin exposes uberlint analyzers to golangci-lint's module plugin system.
-type Plugin struct{}
+type Plugin struct {
+	settings Settings
+}
 
 // New constructs the golangci-lint module plugin.
-func New(_ any) (register.LinterPlugin, error) {
-	return &Plugin{}, nil
+func New(rawSettings any) (register.LinterPlugin, error) {
+	var settings Settings
+	if rawSettings != nil {
+		var err error
+		settings, err = register.DecodeSettings[Settings](rawSettings)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &Plugin{settings: settings}, nil
 }
 
 // BuildAnalyzers returns all analyzers owned by this plugin.
-func (*Plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
-	return NewPlugins(), nil
+func (p *Plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
+	return selectAnalyzers(NewPlugins(), p.settings)
 }
 
 // GetLoadMode requests type information because several analyzers are type-aware.
@@ -52,4 +70,44 @@ func NewPlugins() []*analysis.Analyzer {
 		analyzers.NakedParams,
 		analyzers.TimeField,
 	}
+}
+
+func selectAnalyzers(all []*analysis.Analyzer, settings Settings) ([]*analysis.Analyzer, error) {
+	byName := make(map[string]*analysis.Analyzer, len(all))
+	for _, analyzer := range all {
+		byName[analyzer.Name] = analyzer
+	}
+
+	if len(settings.Enable) > 0 && len(settings.Disable) > 0 {
+		return nil, fmt.Errorf("use either enable or disable, not both")
+	}
+
+	if len(settings.Enable) > 0 {
+		selected := make([]*analysis.Analyzer, 0, len(settings.Enable))
+		for _, name := range settings.Enable {
+			analyzer, ok := byName[name]
+			if !ok {
+				return nil, fmt.Errorf("unknown analyzer %q", name)
+			}
+			selected = append(selected, analyzer)
+		}
+		return selected, nil
+	}
+
+	disabled := make(map[string]struct{}, len(settings.Disable))
+	for _, name := range settings.Disable {
+		if _, ok := byName[name]; !ok {
+			return nil, fmt.Errorf("unknown analyzer %q", name)
+		}
+		disabled[name] = struct{}{}
+	}
+
+	selected := make([]*analysis.Analyzer, 0, len(all)-len(disabled))
+	for _, analyzer := range all {
+		if _, skip := disabled[analyzer.Name]; skip {
+			continue
+		}
+		selected = append(selected, analyzer)
+	}
+	return selected, nil
 }

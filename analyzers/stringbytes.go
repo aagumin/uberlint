@@ -55,7 +55,7 @@ func checkConvInBlock(pass *analysis.Pass, block *ast.BlockStmt) {
 		}
 		// Only flag if argument is a string literal (not a variable)
 		if _, isLit := call.Args[0].(*ast.BasicLit); isLit {
-			pass.Reportf(call.Pos(), "stringbytes: avoid repeated string-to-byte conversion")
+			pass.Reportf(call.Pos(), "avoid repeated string-to-byte conversion")
 		}
 		return true
 	})

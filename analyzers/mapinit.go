@@ -21,7 +21,7 @@ func runMapInit(pass *analysis.Pass) (interface{}, error) {
 				return true
 			}
 			if _, ok := lit.Type.(*ast.MapType); ok {
-				pass.Reportf(lit.Pos(), "mapinit: use make for empty map initialization")
+				pass.Reportf(lit.Pos(), "use make for empty map initialization")
 			}
 			return true
 		})

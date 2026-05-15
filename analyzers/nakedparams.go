@@ -31,7 +31,7 @@ func runNakedParams(pass *analysis.Pass) (interface{}, error) {
 				}
 			}
 			if naked >= 2 {
-				pass.Reportf(first.Pos(), "nakedparams: avoid naked literal parameters")
+				pass.Reportf(first.Pos(), "avoid naked literal parameters")
 			}
 			return true
 		})
