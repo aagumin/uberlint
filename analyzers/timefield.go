@@ -23,7 +23,7 @@ func runTimeField(pass *analysis.Pass) (interface{}, error) {
 				return true
 			}
 			for _, field := range structType.Fields.List {
-				if field.Tag == nil || !hasSerializationTag(field.Tag.Value) || !isNumericType(pass, field.Type) {
+				if field.Tag == nil || !hasSerializationTag(field.Tag.Value) || isStdTimeType(pass, field.Type) || !isNumericType(pass, field.Type) {
 					continue
 				}
 				for _, name := range field.Names {
@@ -40,6 +40,25 @@ func runTimeField(pass *analysis.Pass) (interface{}, error) {
 
 func hasSerializationTag(tag string) bool {
 	return strings.Contains(tag, `json:"`) || strings.Contains(tag, `yaml:"`)
+}
+
+func isStdTimeType(pass *analysis.Pass, expr ast.Expr) bool {
+	t := pass.TypesInfo.TypeOf(expr)
+	if t == nil {
+		return false
+	}
+	named, ok := t.(*types.Named)
+	if !ok {
+		return false
+	}
+	obj := named.Obj()
+	if obj == nil || obj.Pkg() == nil {
+		return false
+	}
+	if obj.Pkg().Path() != "time" {
+		return false
+	}
+	return obj.Name() == "Duration" || obj.Name() == "Time"
 }
 
 func isNumericType(pass *analysis.Pass, expr ast.Expr) bool {

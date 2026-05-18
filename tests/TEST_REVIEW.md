@@ -91,7 +91,7 @@ Expanded `analysistest` fixtures with additional unit-testable cases:
 - `nilslice`: `make([]T, 0, cap)` returns and allocated non-empty buffer guard.
 - `publicembed`: embedded pointer fields in exported structs.
 - `stringbytes`: range loops.
-- `timefield`: float/int64 serialized time-like fields and non-serialized/non-numeric guards.
+- `timefield`: float/int64 serialized time-like fields, non-serialized/non-numeric guards, and `time.Duration`/`time.Time` false-positive guards.
 - `zerofields`: float and imaginary zero values.
 - `zerovar`: named struct aliases.
 
