@@ -233,6 +233,17 @@ docker run --rm -v "$PWD:/workspace" -w /workspace ghcr.io/aagumin/uberlint:late
 ```
 
 The image uses a custom `golangci-lint` binary with `uberlint` registered as `custom-gcl`, so arguments are the same as `golangci-lint` after the image name.
+Release images are published when a git tag is pushed. For example, pushing `v0.1.7` publishes both the linter version tag and the combined linter/runtime tag:
+
+```bash
+git tag v0.1.7
+git push origin v0.1.7
+```
+
+```text
+ghcr.io/aagumin/uberlint:v0.1.7
+ghcr.io/aagumin/uberlint:v0.1.7-golangci-v2.12.2
+```
 
 The image also includes `kube-api-linter`:
 
