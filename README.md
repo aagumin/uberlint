@@ -224,6 +224,22 @@ jobs:
 
 For faster CI, cache Go modules and the `golangci-lint` cache using your CI provider's normal Go caching setup.
 
+## Container Image
+
+`uberlint` publishes a ready-to-run container image to GitHub Container Registry:
+
+```bash
+docker run --rm -v "$PWD:/workspace" -w /workspace ghcr.io/aagumin/uberlint:latest run ./...
+```
+
+The image uses a custom `golangci-lint` binary with `uberlint` registered as `custom-gcl`, so arguments are the same as `golangci-lint` after the image name.
+
+The image also includes `kube-api-linter`:
+
+```bash
+docker run --rm --entrypoint golangci-lint-kube-api-linter -v "$PWD:/workspace" -w /workspace ghcr.io/aagumin/uberlint:latest run ./...
+```
+
 ## Standalone Runner
 
 For development, you can also run `uberlint` without `golangci-lint`:
