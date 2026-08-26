@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.7
 
-ARG GOLANGCI_LINT_VERSION=v2.12.2
+ARG GOLANGCI_LINT_VERSION=v2.13.1
 ARG KUBE_API_LINTER_VERSION=latest
 
 FROM golangci/golangci-lint:${GOLANGCI_LINT_VERSION}-alpine AS builder
@@ -19,7 +19,7 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 golangci-lint custom -v
+RUN CGO_ENABLED=0 golangci-lint custom -v --name golangci-lint
 
 FROM golangci/golangci-lint:${GOLANGCI_LINT_VERSION}-alpine
 

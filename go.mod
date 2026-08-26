@@ -1,6 +1,6 @@
 module github.com/aagumin/uberlint
 
-go 1.25.5
+go 1.26.7
 
 require golang.org/x/tools v0.45.0
 
