@@ -26,7 +26,7 @@ FROM golangci/golangci-lint:${GOLANGCI_LINT_VERSION}-alpine
 RUN apk --no-cache add binutils gcc git mercurial musl-dev && \
     git config --global --add safe.directory '*'
 
-COPY --from=builder /src/custom-gcl /usr/bin/custom-gcl
+COPY --from=builder /src/golangci-lint /usr/bin/golangci-lint
 COPY --from=builder /go/bin/golangci-lint-kube-api-linter /usr/bin/golangci-lint-kube-api-linter
 
-ENTRYPOINT ["custom-gcl"]
+ENTRYPOINT ["golangci-lint"]
